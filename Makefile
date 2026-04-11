@@ -11,7 +11,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build up start down logs sh bash test stan composer vendor sf cc trust-cert setup clean
+.PHONY        : help build up start down logs sh bash test stan cs composer vendor sf cc trust-cert setup clean
 
 ## —— Docker ————————————————————————————————————————————————————————————————
 help: ## Outputs this help screen
@@ -47,6 +47,10 @@ test: ## Start tests with phpunit, pass "c=" to add options, example: make test 
 stan: ## Run PHPStan static analysis, pass "c=" to add options, example: make stan c="--generate-baseline"
 	@$(eval c ?=)
 	@$(PHP) vendor/bin/phpstan analyse $(c)
+
+cs: ## Run PHP CS Fixer, pass "c=" to add options, example: make cs c="--dry-run --diff"
+	@$(eval c ?=)
+	@$(PHP) vendor/bin/php-cs-fixer fix $(c)
 
 ## —— Composer ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass "c=" to run a command, example: make composer c='req symfony/orm-pack'
