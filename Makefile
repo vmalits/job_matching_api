@@ -11,7 +11,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build up start down logs sh bash test composer vendor sf cc trust-cert setup clean
+.PHONY        : help build up start down logs sh bash test stan composer vendor sf cc trust-cert setup clean
 
 ## —— Docker ————————————————————————————————————————————————————————————————
 help: ## Outputs this help screen
@@ -43,6 +43,10 @@ bash: ## Connect to the FrankenPHP container via bash
 test: ## Start tests with phpunit, pass "c=" to add options, example: make test c="--group e2e"
 	@$(eval c ?=)
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit $(c)
+
+stan: ## Run PHPStan static analysis, pass "c=" to add options, example: make stan c="--generate-baseline"
+	@$(eval c ?=)
+	@$(PHP) vendor/bin/phpstan analyse $(c)
 
 ## —— Composer ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass "c=" to run a command, example: make composer c='req symfony/orm-pack'

@@ -52,6 +52,7 @@ sudo update-ca-certificates
 | `make composer c='require ...'` | Выполнить composer-команду |
 | `make vendor` | Установить зависимости |
 | `make test` | Запустить тесты |
+| `make stan` | Запустить PHPStan (статический анализ) |
 | `make trust-cert` | Доверять HTTPS-сертификату Caddy (macOS) |
 
 ## Структура Docker

@@ -1,0 +1,16 @@
+parameters:
+    level: 8
+    paths:
+        - src/
+        - config/
+    excludePaths:
+        - config/reference.php
+
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+        consoleApplicationLoader: bin/console
+
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
