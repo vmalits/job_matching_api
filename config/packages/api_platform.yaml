@@ -1,7 +1,20 @@
 api_platform:
-    title: Job API Platform
+    title: Job Matching API
     version: 1.0.0
     defaults:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+    formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        html: ['text/html']
+    docs_formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        html: ['text/html']
+    error_formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+    enable_swagger_ui: true
+    enable_re_doc: true

@@ -5,7 +5,7 @@
 # See also https://symfony.com/doc/current/service_container/import.html
 
 # Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+# https://symfony.com/doc/current/best-practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
@@ -23,3 +23,7 @@ services:
             - '../src/Kernel.php'
 
     App\Domain\User\Repository\UserRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\DoctrineUserRepository'
+
+    App\Infrastructure\ApiPlatform\OpenApi\JwtLoginDecorator:
+        decorates: 'api_platform.openapi.factory'
+        arguments: ['@.inner']

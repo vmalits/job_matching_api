@@ -13,7 +13,7 @@
         <field name="password" type="string" length="255" nullable="true"/>
         <field name="firstName" type="string" length="100" column="first_name"/>
         <field name="lastName" type="string" length="100" column="last_name"/>
-        <field name="roles" type="json"/>
+        <field name="roles" type="role_json"/>
         <field name="createdAt" type="datetime_immutable" column="created_at"/>
         <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
     </entity>
