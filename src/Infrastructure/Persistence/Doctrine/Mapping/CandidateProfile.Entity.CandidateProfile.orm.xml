@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\CandidateProfile\Entity\CandidateProfile" table="candidate_profiles">
+        <id name="id" type="string" length="36" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="userId" type="string" length="36" column="user_id"/>
+        <field name="title" type="string" length="200"/>
+        <field name="bio" type="text"/>
+        <field name="location" type="string" length="200"/>
+        <field name="experienceYears" type="integer" column="experience_years"/>
+        <field name="skills" type="json"/>
+        <field name="salaryMin" type="integer" column="salary_min" nullable="true"/>
+        <field name="salaryMax" type="integer" column="salary_max" nullable="true"/>
+        <field name="resumeUrl" type="string" length="500" column="resume_url" nullable="true"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
+    </entity>
+
+</doctrine-mapping>
