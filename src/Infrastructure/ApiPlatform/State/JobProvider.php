@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Domain\Job\Entity\Job;
-use App\Domain\Job\Enum\JobStatus;
 use App\Domain\Job\Repository\JobRepositoryInterface;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepositoryInterface;

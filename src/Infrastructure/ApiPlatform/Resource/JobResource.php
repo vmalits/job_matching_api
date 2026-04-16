@@ -10,8 +10,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use App\Infrastructure\ApiPlatform\State\JobProvider;
 use App\Infrastructure\ApiPlatform\State\JobProcessor;
+use App\Infrastructure\ApiPlatform\State\JobProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
