@@ -26,11 +26,8 @@ final class JobStatusType extends Type
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
-        if (null === $value) {
-            return null;
-        }
+        return $value?->value;
 
-        return $value->value;
     }
 
     public function getName(): string

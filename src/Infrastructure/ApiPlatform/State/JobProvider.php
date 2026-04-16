@@ -42,7 +42,6 @@ final readonly class JobProvider implements ProviderInterface
                 return null;
             }
 
-            // Draft jobs visible only to their recruiter
             if (!$job->isPublished() && $job->getRecruiterId() !== $currentUser->getId()) {
                 return null;
             }
@@ -51,14 +50,12 @@ final readonly class JobProvider implements ProviderInterface
         }
 
         if ($operation instanceof GetCollection) {
-            // Candidates see only published jobs
             if ($currentUser->isCandidate()) {
                 $jobs = $this->jobRepository->findPublished();
 
                 return array_map($this->toResource(...), $jobs);
             }
 
-            // Recruiters see their own jobs (all statuses)
             if ($currentUser->isRecruiter()) {
                 $jobs = $this->jobRepository->findByRecruiterId($currentUser->getId());
 
