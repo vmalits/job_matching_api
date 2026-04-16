@@ -26,6 +26,8 @@ services:
 
     App\Domain\CandidateProfile\Repository\CandidateProfileRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\DoctrineCandidateProfileRepository'
 
+    App\Domain\Job\Repository\JobRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\DoctrineJobRepository'
+
     App\Infrastructure\ApiPlatform\OpenApi\JwtLoginDecorator:
         decorates: 'api_platform.openapi.factory'
         arguments: ['@.inner']

@@ -10,6 +10,8 @@ doctrine:
         use_savepoints: true
         types:
             role_json: App\Infrastructure\Persistence\Doctrine\Type\RoleJsonType
+            job_status: App\Infrastructure\Persistence\Doctrine\Type\JobStatusType
+            employment_type: App\Infrastructure\Persistence\Doctrine\Type\EmploymentTypeType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

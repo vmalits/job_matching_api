@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Job\Entity\Job" table="jobs">
+        <id name="id" type="string" length="36" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="recruiterId" type="string" length="36" column="recruiter_id"/>
+        <field name="title" type="string" length="200"/>
+        <field name="description" type="text"/>
+        <field name="companyName" type="string" length="200" column="company_name"/>
+        <field name="location" type="string" length="200"/>
+        <field name="employmentType" type="employment_type" length="20" column="employment_type"/>
+        <field name="status" type="job_status" length="20"/>
+        <field name="skills" type="json"/>
+        <field name="salaryMin" type="integer" column="salary_min" nullable="true"/>
+        <field name="salaryMax" type="integer" column="salary_max" nullable="true"/>
+        <field name="salaryVisible" type="boolean" column="salary_visible"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
+    </entity>
+
+</doctrine-mapping>
