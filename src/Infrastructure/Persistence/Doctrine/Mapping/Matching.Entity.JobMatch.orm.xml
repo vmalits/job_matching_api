@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Matching\Entity\JobMatch" table="matches">
+        <unique-constraints>
+            <unique-constraint columns="candidate_profile_id,job_id" name="uniq_candidate_job"/>
+        </unique-constraints>
+
+        <id name="id" type="string" length="36" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="candidateProfileId" type="string" length="36" column="candidate_profile_id"/>
+        <field name="jobId" type="string" length="36" column="job_id"/>
+        <field name="score" type="integer"/>
+        <field name="status" type="match_status" length="20"/>
+        <field name="skillsMatch" type="float" column="skills_match"/>
+        <field name="salaryMatch" type="float" column="salary_match"/>
+        <field name="locationMatch" type="float" column="location_match"/>
+        <field name="experienceMatch" type="float" column="experience_match"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="updatedAt" type="datetime_immutable" column="updated_at"/>
+    </entity>
+
+</doctrine-mapping>

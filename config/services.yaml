@@ -28,6 +28,8 @@ services:
 
     App\Domain\Job\Repository\JobRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\DoctrineJobRepository'
 
+    App\Domain\Matching\Repository\MatchRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\DoctrineMatchRepository'
+
     App\Infrastructure\ApiPlatform\OpenApi\JwtLoginDecorator:
         decorates: 'api_platform.openapi.factory'
         arguments: ['@.inner']
