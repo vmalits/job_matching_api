@@ -6,10 +6,12 @@ namespace App\Infrastructure\ApiPlatform\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Domain\CandidateProfile\Repository\CandidateProfileRepositoryInterface;
 use App\Domain\Matching\Repository\MatchRepositoryInterface;
 use App\Domain\User\Entity\User;
 use App\Infrastructure\ApiPlatform\Resource\MatchResource;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @implements ProcessorInterface<MatchResource, MatchResource>
@@ -18,6 +20,7 @@ final readonly class MatchProcessor implements ProcessorInterface
 {
     public function __construct(
         private MatchRepositoryInterface $matchRepository,
+        private CandidateProfileRepositoryInterface $profileRepository,
         private MatchProvider $matchProvider,
         private Security $security,
     ) {
@@ -33,6 +36,13 @@ final readonly class MatchProcessor implements ProcessorInterface
         $currentUser = $this->security->getUser();
 
         $match = $this->matchRepository->getById($uriVariables['id']);
+
+        if ($currentUser->isCandidate()) {
+            $profile = $this->profileRepository->findByUserId($currentUser->getId());
+            if (null === $profile || $profile->getId() !== $match->getCandidateProfileId()) {
+                throw new NotFoundHttpException('Not Found');
+            }
+        }
 
         if ('accept' === $data->action) {
             $match->accept();

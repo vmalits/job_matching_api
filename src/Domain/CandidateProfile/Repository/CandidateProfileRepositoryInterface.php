@@ -14,6 +14,8 @@ interface CandidateProfileRepositoryInterface
 
     public function getByUserId(string $userId): CandidateProfile;
 
+    public function findByUserId(string $userId): ?CandidateProfile;
+
     public function findById(string $id): ?CandidateProfile;
 
     public function existsByUserId(string $userId): bool;

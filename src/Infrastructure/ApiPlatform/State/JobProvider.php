@@ -44,20 +44,20 @@ final readonly class JobProvider implements ProviderInterface
                 return null;
             }
 
-            return $this->toResource($job);
+            return $this->toResource($job, $currentUser);
         }
 
         if ($operation instanceof GetCollection) {
             if ($currentUser->isCandidate()) {
                 $jobs = $this->jobRepository->findPublished();
 
-                return array_map($this->toResource(...), $jobs);
+                return array_map(fn (Job $j): JobResource => $this->toResource($j, $currentUser), $jobs);
             }
 
             if ($currentUser->isRecruiter()) {
                 $jobs = $this->jobRepository->findByRecruiterId($currentUser->getId());
 
-                return array_map($this->toResource(...), $jobs);
+                return array_map(fn (Job $j): JobResource => $this->toResource($j, $currentUser), $jobs);
             }
 
             return [];
@@ -66,9 +66,12 @@ final readonly class JobProvider implements ProviderInterface
         return null;
     }
 
-    private function toResource(Job $job): JobResource
+    private function toResource(Job $job, ?User $viewer = null): JobResource
     {
         $recruiter = $this->userRepository->getById($job->getRecruiterId());
+
+        $showSalary = $job->isSalaryVisible()
+            || (null !== $viewer && $viewer->getId() === $job->getRecruiterId());
 
         $resource = new JobResource();
         $resource->id = $job->getId();
@@ -80,8 +83,8 @@ final readonly class JobProvider implements ProviderInterface
         $resource->employmentType = $job->getEmploymentType()->value;
         $resource->status = $job->getStatus()->value;
         $resource->skills = $job->getSkills();
-        $resource->salaryMin = $job->isSalaryVisible() ? $job->getSalaryMin() : null;
-        $resource->salaryMax = $job->isSalaryVisible() ? $job->getSalaryMax() : null;
+        $resource->salaryMin = $showSalary ? $job->getSalaryMin() : null;
+        $resource->salaryMax = $showSalary ? $job->getSalaryMax() : null;
         $resource->salaryVisible = $job->isSalaryVisible();
         $resource->createdAt = $job->getCreatedAt();
         $resource->recruiterEmail = $recruiter->getEmail();

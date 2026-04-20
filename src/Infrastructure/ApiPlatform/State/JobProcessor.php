@@ -46,7 +46,7 @@ final readonly class JobProcessor implements ProcessorInterface
             $this->updateJob($job, $data);
             $this->jobRepository->save($job);
 
-            return $this->toResource($job);
+            return $this->toResource($job, $currentUser);
         }
 
         /** @var non-empty-string $title */
@@ -79,7 +79,7 @@ final readonly class JobProcessor implements ProcessorInterface
 
         $this->jobRepository->save($job);
 
-        return $this->toResource($job);
+        return $this->toResource($job, $currentUser);
     }
 
     private function updateJob(Job $job, JobResource $data): void
@@ -112,9 +112,12 @@ final readonly class JobProcessor implements ProcessorInterface
         }
     }
 
-    private function toResource(Job $job): JobResource
+    private function toResource(Job $job, User $currentUser): JobResource
     {
         $recruiter = $this->userRepository->getById($job->getRecruiterId());
+
+        $showSalary = $job->isSalaryVisible()
+            || $currentUser->getId() === $job->getRecruiterId();
 
         $resource = new JobResource();
         $resource->id = $job->getId();
@@ -126,8 +129,8 @@ final readonly class JobProcessor implements ProcessorInterface
         $resource->employmentType = $job->getEmploymentType()->value;
         $resource->status = $job->getStatus()->value;
         $resource->skills = $job->getSkills();
-        $resource->salaryMin = $job->isSalaryVisible() ? $job->getSalaryMin() : null;
-        $resource->salaryMax = $job->isSalaryVisible() ? $job->getSalaryMax() : null;
+        $resource->salaryMin = $showSalary ? $job->getSalaryMin() : null;
+        $resource->salaryMax = $showSalary ? $job->getSalaryMax() : null;
         $resource->salaryVisible = $job->isSalaryVisible();
         $resource->createdAt = $job->getCreatedAt();
         $resource->recruiterEmail = $recruiter->getEmail();

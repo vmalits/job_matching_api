@@ -30,15 +30,20 @@ final readonly class DoctrineCandidateProfileRepository implements CandidateProf
 
     public function getByUserId(string $userId): CandidateProfile
     {
-        $profile = $this->em
-            ->getRepository(CandidateProfile::class)
-            ->findOneBy(['userId' => $userId]);
+        $profile = $this->findByUserId($userId);
 
         if (null === $profile) {
             throw CandidateProfileNotFoundException::byUserId($userId);
         }
 
         return $profile;
+    }
+
+    public function findByUserId(string $userId): ?CandidateProfile
+    {
+        return $this->em
+            ->getRepository(CandidateProfile::class)
+            ->findOneBy(['userId' => $userId]);
     }
 
     public function findById(string $id): ?CandidateProfile

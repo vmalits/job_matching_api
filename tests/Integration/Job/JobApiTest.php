@@ -271,4 +271,32 @@ class JobApiTest extends ApiTestCase
         static::assertNull($data['salaryMax']);
         static::assertFalse($data['salaryVisible']);
     }
+
+    #[Test]
+    public function recruiterSeesOwnSalaryEvenWhenNotVisible(): void
+    {
+        $user = $this->registerRecruiter();
+        $this->authenticate($user['token']);
+        $this->client->request('POST', '/api/jobs', [
+            'json' => [
+                'title' => 'Secret Salary Job',
+                'description' => 'Desc',
+                'companyName' => 'Corp',
+                'location' => 'Berlin',
+                'employmentType' => 'full_time',
+                'salaryMin' => 80000,
+                'salaryMax' => 120000,
+                'salaryVisible' => false,
+            ],
+        ]);
+        $job = $this->client->getResponse()->toArray();
+
+        $this->client->request('GET', '/api/jobs/'.$job['id']);
+
+        static::assertResponseIsSuccessful();
+        $data = $this->client->getResponse()->toArray();
+        static::assertSame(80000, $data['salaryMin']);
+        static::assertSame(120000, $data['salaryMax']);
+        static::assertFalse($data['salaryVisible']);
+    }
 }

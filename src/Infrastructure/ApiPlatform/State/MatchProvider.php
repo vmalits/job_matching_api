@@ -40,6 +40,19 @@ final readonly class MatchProvider implements ProviderInterface
 
         if (isset($uriVariables['id'])) {
             $match = $this->matchRepository->getById($uriVariables['id']);
+
+            if ($currentUser->isCandidate()) {
+                $profile = $this->profileRepository->findByUserId($currentUser->getId());
+                if (null === $profile || $profile->getId() !== $match->getCandidateProfileId()) {
+                    return null;
+                }
+            } elseif ($currentUser->isRecruiter()) {
+                $job = $this->jobRepository->findById($match->getJobId());
+                if (null === $job || $job->getRecruiterId() !== $currentUser->getId()) {
+                    return null;
+                }
+            }
+
             $this->markViewed($match, $currentUser);
 
             return $this->toResource($match, $currentUser);

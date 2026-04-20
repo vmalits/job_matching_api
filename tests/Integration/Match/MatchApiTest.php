@@ -156,4 +156,62 @@ class MatchApiTest extends ApiTestCase
 
         static::assertResponseStatusCodeSame(401);
     }
+
+    #[Test]
+    public function candidateCannotAcceptOtherCandidatesMatch(): void
+    {
+        $candidateA = $this->createCandidateWithProfile();
+        $recruiter = $this->createRecruiterWithPublishedJob();
+
+        $match = $this->createTestMatch(
+            $candidateA['profile']['id'],
+            $recruiter['job']['id'],
+        );
+
+        $candidateB = $this->registerCandidate('other-candidate@test.com');
+        $this->authenticate($candidateB['token']);
+
+        $this->client->request('PATCH', '/api/matches/'.$match->getId(), [
+            'json' => ['action' => 'accept'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+
+        static::assertResponseStatusCodeSame(404);
+    }
+
+    #[Test]
+    public function candidateCannotViewOtherCandidatesMatch(): void
+    {
+        $candidateA = $this->createCandidateWithProfile();
+        $recruiter = $this->createRecruiterWithPublishedJob();
+
+        $match = $this->createTestMatch(
+            $candidateA['profile']['id'],
+            $recruiter['job']['id'],
+        );
+
+        $candidateB = $this->registerCandidate('other-candidate@test.com');
+        $this->authenticate($candidateB['token']);
+        $this->client->request('GET', '/api/matches/'.$match->getId());
+
+        static::assertResponseStatusCodeSame(404);
+    }
+
+    #[Test]
+    public function recruiterCannotViewMatchForOtherRecruitersJob(): void
+    {
+        $candidate = $this->createCandidateWithProfile();
+        $recruiterA = $this->createRecruiterWithPublishedJob();
+
+        $match = $this->createTestMatch(
+            $candidate['profile']['id'],
+            $recruiterA['job']['id'],
+        );
+
+        $recruiterB = $this->registerRecruiter('other-recruiter@test.com');
+        $this->authenticate($recruiterB['token']);
+        $this->client->request('GET', '/api/matches/'.$match->getId());
+
+        static::assertResponseStatusCodeSame(404);
+    }
 }
