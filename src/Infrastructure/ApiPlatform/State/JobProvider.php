@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiPlatform\State;
 
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -35,7 +34,7 @@ final readonly class JobProvider implements ProviderInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
-        if ($operation instanceof Get && isset($uriVariables['id'])) {
+        if (isset($uriVariables['id'])) {
             $job = $this->jobRepository->findById($uriVariables['id']);
             if (null === $job) {
                 return null;

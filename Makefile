@@ -69,6 +69,10 @@ sf: ## List all Symfony commands or pass "c=" to run a command, example: make sf
 cc: c=c:c ## Clear the cache
 cc: sf
 
+test-setup: ## Create and migrate the test database
+	@$(SYMFONY) doctrine:database:create --env=test --if-not-exists
+	@$(SYMFONY) doctrine:migration:migrate --env=test --no-interaction
+
 ## —— Setup ———————————————————————————————————————————————————————————————
 setup: build up ## First-time project setup (build, start, install vendors, trust cert)
 	@$(COMPOSER) install --prefer-dist --no-progress --no-interaction

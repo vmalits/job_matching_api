@@ -15,25 +15,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    shortName: 'CandidateProfile',
     operations: [
         new Get(
             provider: CandidateProfileProvider::class,
         ),
         new Post(
-            processor: CandidateProfileProcessor::class,
+            normalizationContext: ['groups' => ['profile:read']],
+            denormalizationContext: ['groups' => ['profile:write']],
             security: 'is_granted("ROLE_CANDIDATE")',
             securityMessage: 'Only candidates can create profiles.',
-            normalizationContext: ['groups' => ['profile:read']],
-            denormalizationContext: ['groups' => ['profile:write']],
             validationContext: ['groups' => ['profile:write']],
+            processor: CandidateProfileProcessor::class,
         ),
         new Patch(
-            processor: CandidateProfileProcessor::class,
-            security: 'is_granted("ROLE_CANDIDATE")',
-            securityMessage: 'Only candidates can update profiles.',
+            provider: CandidateProfileProvider::class,
             normalizationContext: ['groups' => ['profile:read']],
             denormalizationContext: ['groups' => ['profile:write']],
+            security: 'is_granted("ROLE_CANDIDATE")',
+            securityMessage: 'Only candidates can update profiles.',
             validationContext: ['groups' => ['profile:write']],
+            processor: CandidateProfileProcessor::class,
         ),
     ],
     normalizationContext: ['groups' => ['profile:read']],

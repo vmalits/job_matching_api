@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    shortName: 'Job',
     operations: [
         new Get(
             provider: JobProvider::class,
@@ -32,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: JobProcessor::class,
         ),
         new Patch(
+            provider: JobProvider::class,
             normalizationContext: ['groups' => ['job:read']],
             denormalizationContext: ['groups' => ['job:write']],
             security: 'is_granted("ROLE_RECRUITER")',

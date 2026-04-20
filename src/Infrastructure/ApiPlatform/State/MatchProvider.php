@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiPlatform\State;
 
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -39,7 +38,7 @@ final readonly class MatchProvider implements ProviderInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
-        if ($operation instanceof Get && isset($uriVariables['id'])) {
+        if (isset($uriVariables['id'])) {
             $match = $this->matchRepository->getById($uriVariables['id']);
             $this->markViewed($match, $currentUser);
 

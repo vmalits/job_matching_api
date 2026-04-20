@@ -14,6 +14,7 @@ use App\Infrastructure\ApiPlatform\State\MatchProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
+    shortName: 'Match',
     operations: [
         new Get(
             provider: MatchProvider::class,
@@ -22,6 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             provider: MatchProvider::class,
         ),
         new Patch(
+            provider: MatchProvider::class,
             normalizationContext: ['groups' => ['match:read']],
             denormalizationContext: ['groups' => ['match:update']],
             processor: MatchProcessor::class,

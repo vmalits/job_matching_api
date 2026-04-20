@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    shortName: 'User',
     operations: [
         new Get(
             security: 'is_granted("ROLE_USER")',

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ApiPlatform\State;
 
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Domain\CandidateProfile\Entity\CandidateProfile;
@@ -31,7 +30,7 @@ final readonly class CandidateProfileProvider implements ProviderInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
-        if ($operation instanceof Get && isset($uriVariables['id'])) {
+        if (isset($uriVariables['id'])) {
             $profile = $this->profileRepository->findById($uriVariables['id']);
 
             if (null === $profile) {

@@ -14,3 +14,9 @@ framework:
 
         routing:
             App\Application\Matching\Message\CalculateMatchesMessage: async
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                async: 'sync://'
