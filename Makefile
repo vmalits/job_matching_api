@@ -46,7 +46,7 @@ test: ## Start tests with phpunit, pass "c=" to add options, example: make test 
 
 stan: ## Run PHPStan static analysis, pass "c=" to add options, example: make stan c="--generate-baseline"
 	@$(eval c ?=)
-	@$(PHP) vendor/bin/phpstan analyse $(c)
+	@$(PHP) -d memory_limit=512M vendor/bin/phpstan analyse $(c)
 
 cs: ## Run PHP CS Fixer, pass "c=" to add options, example: make cs c="--dry-run --diff"
 	@$(eval c ?=)
