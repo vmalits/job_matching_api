@@ -14,6 +14,7 @@ use App\Domain\User\Entity\User;
 use App\Domain\User\Repository\UserRepositoryInterface;
 use App\Infrastructure\ApiPlatform\Resource\JobResource;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @implements ProcessorInterface<JobResource, JobResource>
@@ -40,7 +41,7 @@ final readonly class JobProcessor implements ProcessorInterface
             $job = $this->jobRepository->getById($uriVariables['id']);
 
             if ($job->getRecruiterId() !== $currentUser->getId()) {
-                throw new \LogicException('You can only edit your own jobs.');
+                throw new AccessDeniedHttpException('You can only edit your own jobs.');
             }
 
             $this->updateJob($job, $data);

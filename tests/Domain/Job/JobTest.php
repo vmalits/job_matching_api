@@ -55,6 +55,8 @@ class JobTest extends TestCase
     #[Test]
     public function itArchivesJob(): void
     {
+        $this->job->publish();
+        $this->job->close();
         $this->job->archive();
 
         $this->assertSame(JobStatus::ARCHIVED, $this->job->getStatus());

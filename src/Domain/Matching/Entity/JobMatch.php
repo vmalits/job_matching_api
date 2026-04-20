@@ -100,6 +100,9 @@ class JobMatch
 
     public function accept(): static
     {
+        if (MatchStatus::PENDING !== $this->status && MatchStatus::VIEWED !== $this->status) {
+            throw new \LogicException('Only pending or viewed matches can be accepted.');
+        }
         $this->status = MatchStatus::ACCEPTED;
         $this->updatedAt = new \DateTimeImmutable();
 
@@ -108,6 +111,9 @@ class JobMatch
 
     public function reject(): static
     {
+        if (MatchStatus::PENDING !== $this->status && MatchStatus::VIEWED !== $this->status) {
+            throw new \LogicException('Only pending or viewed matches can be rejected.');
+        }
         $this->status = MatchStatus::REJECTED;
         $this->updatedAt = new \DateTimeImmutable();
 

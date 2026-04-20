@@ -11,6 +11,7 @@ use App\Domain\Matching\Repository\MatchRepositoryInterface;
 use App\Domain\User\Entity\User;
 use App\Infrastructure\ApiPlatform\Resource\MatchResource;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -42,6 +43,8 @@ final readonly class MatchProcessor implements ProcessorInterface
             if (null === $profile || $profile->getId() !== $match->getCandidateProfileId()) {
                 throw new NotFoundHttpException('Not Found');
             }
+        } else {
+            throw new AccessDeniedHttpException('Only candidates can modify match status.');
         }
 
         if ('accept' === $data->action) {

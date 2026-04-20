@@ -299,4 +299,75 @@ class JobApiTest extends ApiTestCase
         static::assertSame(120000, $data['salaryMax']);
         static::assertFalse($data['salaryVisible']);
     }
+
+    #[Test]
+    public function recruiterCannotCloseDraftJob(): void
+    {
+        $user = $this->registerRecruiter();
+        $this->authenticate($user['token']);
+        $this->client->request('POST', '/api/jobs', ['json' => [
+            'title' => 'Job',
+            'description' => 'Desc',
+            'companyName' => 'Corp',
+            'location' => 'Berlin',
+            'employmentType' => 'full_time',
+        ]]);
+        $job = $this->client->getResponse()->toArray();
+
+        $this->client->request('PATCH', '/api/jobs/'.$job['id'], [
+            'json' => ['status' => 'closed'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+
+        static::assertResponseStatusCodeSame(500);
+    }
+
+    #[Test]
+    public function republishingPublishedJobIsNoOp(): void
+    {
+        $user = $this->registerRecruiter();
+        $this->authenticate($user['token']);
+        $this->client->request('POST', '/api/jobs', ['json' => [
+            'title' => 'Job',
+            'description' => 'Desc',
+            'companyName' => 'Corp',
+            'location' => 'Berlin',
+            'employmentType' => 'full_time',
+            'status' => 'published',
+        ]]);
+        $job = $this->client->getResponse()->toArray();
+
+        $this->client->request('PATCH', '/api/jobs/'.$job['id'], [
+            'json' => ['status' => 'published'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+
+        static::assertResponseIsSuccessful();
+        static::assertJsonContains(['status' => 'published']);
+    }
+
+    #[Test]
+    public function recruiterCannotEditOtherRecruitersPublishedJob(): void
+    {
+        $recruiterA = $this->registerRecruiter('owner-pub@test.com');
+        $this->authenticate($recruiterA['token']);
+        $this->client->request('POST', '/api/jobs', ['json' => [
+            'title' => 'Published Job',
+            'description' => 'Desc',
+            'companyName' => 'Corp',
+            'location' => 'Berlin',
+            'employmentType' => 'full_time',
+            'status' => 'published',
+        ]]);
+        $job = $this->client->getResponse()->toArray();
+
+        $recruiterB = $this->registerRecruiter('other-pub@test.com');
+        $this->authenticate($recruiterB['token']);
+        $this->client->request('PATCH', '/api/jobs/'.$job['id'], [
+            'json' => ['title' => 'Hacked'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+
+        static::assertResponseStatusCodeSame(403);
+    }
 }

@@ -214,4 +214,50 @@ class MatchApiTest extends ApiTestCase
 
         static::assertResponseStatusCodeSame(404);
     }
+
+    #[Test]
+    public function recruiterCannotAcceptMatch(): void
+    {
+        $candidate = $this->createCandidateWithProfile();
+        $recruiter = $this->createRecruiterWithPublishedJob();
+
+        $match = $this->createTestMatch(
+            $candidate['profile']['id'],
+            $recruiter['job']['id'],
+        );
+
+        $this->authenticate($recruiter['user']['token']);
+        $this->client->request('PATCH', '/api/matches/'.$match->getId(), [
+            'json' => ['action' => 'accept'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+
+        static::assertResponseStatusCodeSame(403);
+    }
+
+    #[Test]
+    public function candidateCannotRejectAlreadyAcceptedMatch(): void
+    {
+        $candidate = $this->createCandidateWithProfile();
+        $recruiter = $this->createRecruiterWithPublishedJob();
+
+        $match = $this->createTestMatch(
+            $candidate['profile']['id'],
+            $recruiter['job']['id'],
+        );
+
+        $this->authenticate($candidate['user']['token']);
+        $this->client->request('PATCH', '/api/matches/'.$match->getId(), [
+            'json' => ['action' => 'accept'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+        static::assertResponseIsSuccessful();
+
+        $this->client->request('PATCH', '/api/matches/'.$match->getId(), [
+            'json' => ['action' => 'reject'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+
+        static::assertResponseStatusCodeSame(500);
+    }
 }

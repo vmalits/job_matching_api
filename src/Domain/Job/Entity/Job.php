@@ -133,6 +133,9 @@ class Job
 
     public function publish(): static
     {
+        if (JobStatus::DRAFT !== $this->status) {
+            throw new \LogicException('Only draft jobs can be published.');
+        }
         $this->status = JobStatus::PUBLISHED;
         $this->updatedAt = new \DateTimeImmutable();
 
@@ -141,6 +144,9 @@ class Job
 
     public function close(): static
     {
+        if (JobStatus::PUBLISHED !== $this->status) {
+            throw new \LogicException('Only published jobs can be closed.');
+        }
         $this->status = JobStatus::CLOSED;
         $this->updatedAt = new \DateTimeImmutable();
 
@@ -149,6 +155,9 @@ class Job
 
     public function archive(): static
     {
+        if (JobStatus::CLOSED !== $this->status) {
+            throw new \LogicException('Only closed jobs can be archived.');
+        }
         $this->status = JobStatus::ARCHIVED;
         $this->updatedAt = new \DateTimeImmutable();
 
