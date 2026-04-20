@@ -91,9 +91,9 @@ class RegistrationTest extends ApiTestCase
             ],
         ]);
 
-        static::assertResponseStatusCodeSame(500);
+        static::assertResponseStatusCodeSame(409);
         $data = $this->client->getResponse()->toArray(false);
-        static::assertSame('Email already exists.', $data['detail']);
+        static::assertStringContainsString('already exists', $data['detail']);
     }
 
     #[Test]

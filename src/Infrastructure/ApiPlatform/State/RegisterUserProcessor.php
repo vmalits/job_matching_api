@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Enum\Role;
+use App\Domain\User\Exception\DuplicateEmailException;
 use App\Domain\User\Repository\UserRepositoryInterface;
 use App\Infrastructure\ApiPlatform\Resource\UserResource;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -45,7 +46,7 @@ final readonly class RegisterUserProcessor implements ProcessorInterface
         $roleValue = $data->role;
 
         if ($this->userRepository->existsByEmail($email)) {
-            throw new \DomainException('Email already exists.');
+            throw DuplicateEmailException::withEmail($email);
         }
 
         $role = Role::from($roleValue);
